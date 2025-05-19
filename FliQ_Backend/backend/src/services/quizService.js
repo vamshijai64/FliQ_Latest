@@ -307,6 +307,7 @@ exports.updateQuestion = async(quizId,  questionId,updateData)=>{
     // Update only the fields provided in updateData
     if (updateData.question !== undefined) question.question = updateData.question;
     if (updateData.correctOption !== undefined) question.correctOption = updateData.correctOption;
+    if(updateData.options !== undefined) question.options = updateData.options;  
     if (updateData.hint !== undefined) question.hint = updateData.hint;
     if (updateData.hashtags !== undefined) question.hashtags = updateData.hashtags;
 

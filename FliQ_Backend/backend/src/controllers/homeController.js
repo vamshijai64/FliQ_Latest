@@ -6,101 +6,12 @@ const categoryModel=require('../models/CategeoryModel')
 
 const subcategoryModel=require('../models/subcategoryModel');
 const titleModel = require('../models/titleModel');
-const QuizModel = require('../models/QuizModel');
-const movienewsModel = require('../models/movienewsModel');
 const sectionModel = require('../models/sectionModel');
 const BannerModel = require('../models/BannerModel');
+const buildRegex = (query) => new RegExp(`^${query}`, 'i');
+// const buildRegex = (query) => new RegExp(`^${query}`, 'i');
 
 
-//{
-// get home data future enhancemnets
-//  future enhancements, Caching → Faster responses
-//  Pagination → Load more data dynamically
-//  Search & Filtering → Better
-// Indexing → Optimize large datasets
-//  Real-time updates → WebSockets for live changes}
-// exports.gethome = async (req, res) => {
-//   try {
-//     // this line Fetch latest one for banners
-//     const latestMovieNews = await movieNewsmodel
-//       .findOne()
-//       .sort({ createdAt: -1 })
-//       .select(" _id title description imageUrl createdAt");
-
-//     const latestMovieReview = await sectionModel
-//       .findOne()
-//       .sort({ createdAt: -1 })
-//       .select("_id title  imageUrl rating createdAt");
-
-//     const latestCategory = await categoryModel
-//       .findOne()
-//       .sort({ createdAt: -1 })
-//       .select("_id title imageUrl subcategories createdAt");
-
-
-
-
-//     // this lines latest 10 for response
-//     const movieNews = await movieNewsmodel
-//       .find()
-//       .sort({ createdAt: -1 })
-//       .limit(10)
-//       .select("_id title description images imageUrl createdAt");
-
-//     const movieReviews = await sectionModel
-//       .find()
-//       .sort({ createdAt: -1 })
-//       .limit(10)
-//       .select("_id title rating reviewText imageUrl createdAt");
-
-//     const categories = await categoryModel
-//       .find()
-//       .sort({ createdAt: -1 })
-//       .limit(10)
-//       .select(" _id title imageUrl  createdAt");
-
-    
-
-//     // Fetch subcategories for each category with images
-//     const categoriesWithSubcategories = await Promise.all(
-//       categories.map(async (category) => {
-//         const subcategories = await subcategoryModel
-//           .find({ category: category._id })
-//           .select("_id title imageUrl createdAt"); 
-
-//         return { 
-//           _id: category._id,
-//           title: category.title, 
-//           imageUrl: category.imageUrl, subcategories
-//          };
-//       })
-//     );
-
-   
-//     const banners = [];
-    
-//     if (latestMovieNews) banners.push({ type: "movieNews", data: latestMovieNews });
-//     if (latestMovieReview) banners.push({ type: "movieReviews", data: latestMovieReview });
-//     if (latestCategory) banners.push({ type: "categories", data: latestCategory });
-
-//     const response = [
-//       { type: "movieNews", _id: "",data: movieNews },
-//       { type: "movieReviews",_id: "", data: movieReviews },
-//       ...categoriesWithSubcategories.map(category => ({
-//         type: category.title ,
-//         _id: category._id,
-//         data: category.subcategories 
-//       }))
-      
-//     ];
-//     console.log("Categories with Subcategories:", categoriesWithSubcategories);
-
-//     res.json({ banners, response });
-//   } catch (error) {
-//     console.error("Error fetching homepage data:", error);
-//     res.status(500).json({ error: "Failed to load homepage data" });
-//   }
-// };
 
 exports.gethome = async (req, res) => {
   try {
@@ -159,16 +70,16 @@ exports.gethome = async (req, res) => {
         };
       })
     );
+  
 
-    
-const staticmovinews = await BannerModel.findOne({ bannerType: 'MovieNews' }).select('_id title description imageUrl createdAt');
-const staticmoviereview = await BannerModel.findOne({ bannerType: 'MovieReviews' }).select('_id title imageUrl createdAt');
+const staticmovinews = await BannerModel.findOne({ bannerType: 'movieNews' }).select('_id title description imageUrl createdAt');
+const staticmoviereview = await BannerModel.findOne({ bannerType: 'movieReviews' }).select('_id title imageUrl createdAt');
 const staticcategories = await BannerModel.findOne({ bannerType: 'Categories' }).select('_id title imageUrl createdAt');
 
 const static = [];
 
 if (staticmovinews) static.push({
-  type: 'MovieNews',
+  type: 'movieNews',
   data: {
     _id: staticmovinews._id,
     title: staticmovinews.title,
@@ -180,7 +91,7 @@ if (staticmovinews) static.push({
 });
 
 if (staticmoviereview) static.push({
-  type: 'MovieReviews',
+  type: 'movieReviews',
   data: {
     _id: staticmoviereview._id,
     title: staticmoviereview.title,
@@ -205,7 +116,7 @@ if (staticcategories) static.push({
     // Set banners with movie news, including imageUrl and images
     const banners = [];
     if (latestMovieNews) banners.push({ 
-      type: "News", 
+      type: "movieNews", 
       data: {
         _id: latestMovieNews._id,
         title: latestMovieNews.title,
@@ -217,7 +128,7 @@ if (staticcategories) static.push({
     });
 
     if (latestMovieReview) banners.push({ 
-      type: "Movie Reviews", 
+      type: "MovieReviews", 
       data: {
         _id: latestMovieReview._id,
         title: latestMovieReview.title,
@@ -270,7 +181,7 @@ if (staticcategories) static.push({
     console.log("Categories with Subcategories:", categoriesWithSubcategories);
 
     // Send the response with updated banners and movieNews data
-    res.json({ static,banners, response });
+    res.json({ static,banners, response});
   } catch (error) {
     console.error("Error fetching homepage data:", error);
     res.status(500).json({ error: "Failed to load homepage data" });
@@ -294,9 +205,9 @@ exports.getAllData = async (req, res) => {
     let responseData = {};
 
     // Fetch movie news
-    if (lowerCaseType === "news") {
+    if (lowerCaseType === "movienews") {
       responseData = {
-        type: "News",
+        type: "movieNews",
      
         data: await movieNewsmodel
           .find()
@@ -349,174 +260,85 @@ exports.getAllData = async (req, res) => {
   }
 };
 
+exports.getBySearch=async (req, res) => {
+  const query = req.query.q?.trim();
 
+  if (!query) {
+    return res.status(400).json({ success: false, message: 'Query string "q" is required.' });
+  }
+//use this for below code for search
+   const regex = buildRegex(query);
 
+  try {
 
+    //if he crct spee like kohl one by one letter search user it will suaggest all realted data
+    const [
+      categories,
+      subcategories,
+      sections,
+      titles,
+      movieNews
+    ] = await Promise.all([
+      categoryModel.find({ title: regex }, 'title imageUrl').limit(10),
+      subcategoryModel.find({ title: regex }, 'title imageUrl').limit(10),
+      sectionModel.find({ name: regex }, 'title imageUrl').limit(10),
+      titleModel.find({ name: regex }, 'title imageUrl').limit(10),
+      movieNewsmodel.find({ title: regex }, 'title imageUrl description images ').limit(10)
+    ]);
+    const results = [
+      ...categories.map(c => ({ type: 'Category', ...c._doc})),
+      ...subcategories.map(sc => ({ type: 'Subcategory', ...sc._doc })),
+      ...sections.map(s => ({ type: 'Section', value: s.name })),
+      ...titles.map(t => ({ type: 'Title', value: t.name })),
+      ...movieNews.map(mn => ({ type: 'News',  ...mn._doc }))
+    ];
 
-// exports.getAllData = async (req, res) => {
-//   try {
-//     const { section } = req.query;
+    res.json({ success: true, query, results });
+  } catch (err) {
+    console.error('Search Error:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+}
 
-//     if (!section) {
-//       return res.status(400).json({ error: "Missing section parameter" });
-//     }
+exports.getBySearchWrong = async (req, res) => {
+  const rawQuery = req.query.q || '';
+  const query = rawQuery.trim().replace(/\s+/g, ' ');
 
-//     let data = {};
+  const regex = buildRegex(query);
+  if (!query) {
+    return res.status(400).json({ success: false, message: 'Query string "q" is required.' });
+  }
 
-//     if (section.toLowerCase() === "movienews") {
-//       data.movieNews = await movieNewsmodel
-//         .find()
-//         .sort({ createdAt: -1 })
-//         .select("title description imageUrl createdAt");
-//     } 
-//     else if (section.toLowerCase() === "reviews") {
-//       data.movieReviews = await titleModel
-//         .find()
-//         .sort({ createdAt: -1 })
-//         .select("title rating reviewText imageUrl createdAt");
-//     } 
-//     else if (section.toLowerCase() === "categories") {
-//       const categories = await categoryModel
-//         .find()
-//         .sort({ createdAt: -1 })
-//         .select("title imageUrl createdAt");
-
-//       const categoriesWithSubcategories = await Promise.all(
-//         categories.map(async (category) => {
-//           const subcategories = await subcategoryModel
-//             .find({ category: category._id })
-//             .select("title imageUrl createdAt");
-
-//           return { title: category.title, imageUrl: category.imageUrl, subcategories };
-//         })
-//       );
-
-//       data.categories = categoriesWithSubcategories;
-//     } 
-//     else if(section.toLowerCase()==='subcategories'){
-//       const subcategories=await subcategoryModel
-//       .find().select('title imageUrl createdAt')
-          
-
-//       const subcategoriesWithCategory=await Promise.all(
-//         subcategories.map(async(subcategory)=>{
-//           const category=await categoryModel.findById(subcategory
-//             .category)
-//             .select('title imageUrl createdAt');
-
-//             return{title:subcategory.title,imageUrl:subcategory.imageUrl,category}    
-//           })
-//         )
-//     }
-//     else {
-//       return res.status(400).json({ error: "Invalid section provided" });
-//     }
-
-//     res.json(data);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//     res.status(500).json({ error: "Unable to fetch data for the selected section" });
-//   }
-// };
-
-
-// exports.getAllData = async (req, res) => {
-  
-//   try {
-//     const section = req.query.section ? req.query.section.toLowerCase() : null;
-//     console.log("Requested Section:", section);
-//     const data = {};
+  try {
+    const [categories, subcategories, sectionModel,titleModel,movieNews] = await Promise.all([
+      categoryModel.find({ title: regex }, 'title imageUrl').limit(10),
+      subcategoryModel.find({ title: regex }, 'title imageUrl').limit(10),
+      sectionModel.find({ name: regex }, 'title imageUrl').limit(10),
+      titleModel.find({ name: regex }, 'title imageUrl').limit(10),
+      movieNewsmodel.find({ title: regex }, 'title imageUrl images description').limit(10)
+    ]);
     
-//     // if (section === 'movienews') {
-      
-//     //   const latestBanners = await movieNewsmodel
-//     //     .find({ bannerType: 'movieNews' })
-//     //     .sort({ createdAt: -1 })
-//     //     .limit(5);
-        
+    const combinedResults = [
+      ...categories.map(c => ({ type: 'Category', ...c._doc })),
+      ...subcategories.map(sc => ({ type: 'Subcategory', ...sc._doc })),
+      ...sections.map(s => ({ type: 'Section', value: s.name })),
+      ...titles.map(t => ({ type: 'Title', value: t.name })),
+      ...movieNews.map(mn => ({ type: 'CricketNews', ...mn._doc }))
+    ];
     
-//     //   const excludedIds = latestBanners.map(banner => banner.relatedId);
+    const fuse = new Fuse(combinedResults, {
+      keys: ['title'], // depends on fields used
+      threshold: 0.4,
+      ignoreLocation: true,
+      minMatchCharLength: 1
+    });
 
-//       if (section === 'movienews'){
-    
-//       data.movieNews = await movieNewsmodel
-//       .find({ _id: { $nin: excludedIds } })
-//       .sort({ createdAt: -1 })
-//       .select("-__v");
-      
-      
-//     } else if (section === 'reviews') {
-      
-//       console.log("Fetching all movie reviews...");
-      
-      
-//       data.movieReviews = await titleModel.find().sort({ createdAt: -1 }).select("-__v");
-      
-//     } else if (section === 'subcategories') {
-//       console.log("Fetching all subcategories...");
-      
-     
-//       data.subcategories = await subcategoryModel
-//       .find()
-//       .populate("category", "title imageUrl")
-//       .sort({ createdAt: -1 })
-//       .select("-__v");
-//     }else if(section ==='category'){
-//       data.categories=await categoryModel
-//       .find().
-//       populate('subcategories ','title imageUrl')
-//       .sort({createdAt:-1})
-//       .select('__v');
-//     }
-//     else{
-//       return res.status(400).json({error:'Inavaild section provided'})
-//     }
-    
-//     res.json(data);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Unable to fetch data for the selected section' });
-//   }
-// };
+    const results = fuse.search(query).slice(0, 15).map(r => r.item);
 
+    res.json({ success: true, query, results });
+  } catch (err) {
+    console.error('Search error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ///gethome single api 
-
-//   // try {
-//   //   // Fetch banners grouped by type
-//   //   const movieNewsBanners = await bannermodel.find({ bannerType: 'movieNews' }).sort({ createdAt: -1 }).limit(5);
-//   //   const movieReviewsBanners = await bannermodel.find({ bannerType: 'movieReviews' }).sort({ createdAt: -1 }).limit(5);
-//   //   const quizzesBanners = await bannermodel.find({ bannerType: 'categories' }).sort({ createdAt: -1 }).limit(5);
-
-//   //   res.json({
-//   //     banners: [
-//   //       { type: 'movieNews', data: movieNewsBanners },
-//   //       { type: 'movieReviews', data: movieReviewsBanners },
-//   //       { type: 'quizzes', data: quizzesBanners },
-//   //     ],
-//   //   });
-//   // } catch (error) {
-//   //   console.error('Error fetching banners', error);
-//   //   res.status(500).json({ error: 'Failed to fetch banners' });
-//   // }
+}

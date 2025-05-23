@@ -118,7 +118,7 @@ function MovieCategory() {
                                 </div>
                             ))
                         ) : (
-                            <p className={styles.noMovies}>No Movie Categories found</p>
+                            <center><p >No Movie Categories found</p></center>
                         )}
                     </div>
 

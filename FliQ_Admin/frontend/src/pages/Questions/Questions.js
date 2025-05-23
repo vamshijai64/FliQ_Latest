@@ -173,7 +173,7 @@ function Questions() {
                                 </div>
                             </div>
                             <div className={styles.quizList}>
-                                {quizzes.length === 0 && <p>No quizzes found for this subcategory.</p>}
+                                {quizzes.length === 0 && <p><center>No quizzes found for this subcategory.</center></p>}
                                 {quizzes.map((quiz, index) => (
                                     
                                     <div key={quiz._id} className={styles.quizCard}>

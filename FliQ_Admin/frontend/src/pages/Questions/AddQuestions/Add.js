@@ -143,7 +143,7 @@
                             type="text"
                             placeholder="No file selected"
                             //value={imageUrl ? imageUrl.name : ""}
-                            value={imageUrls || ""}
+                            value={imageUrls.landscape || ""}
                             readOnly
                         />
                         <MdOutlineImage className={styles.icon} onClick={handleIconClick} />

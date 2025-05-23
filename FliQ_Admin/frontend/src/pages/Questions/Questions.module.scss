@@ -94,12 +94,13 @@
 
 .quizCard {
     border: 1px solid #ddd;
+    position: relative;
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 10px;
     background-color: #000000;
-    width: 350%;
-    max-width: 1170px;
+    width: 100%;
+    max-width: 1175px;
 
     h4{
         color: #ccc;

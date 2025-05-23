@@ -111,7 +111,7 @@
                             </div>
                         ))
                     ) : (
-                        <p className={styles.noCategories}>No categories available.</p>
+                        <p className={styles.noCategories}><center>No categories available.</center></p>
                         
                     )}
                 </div>

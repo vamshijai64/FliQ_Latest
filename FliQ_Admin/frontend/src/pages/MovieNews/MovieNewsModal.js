@@ -121,8 +121,7 @@ const handleRemoveImage = (index) => {
 
                 <div className={styles.modalBody}>
                   <label>Title</label>
-                <div className={styles.inputContainer}>
-                    
+                <div className={styles.inputContainer}> 
                     <input 
                         type="text"
                         placeholder="Enter movie title"
@@ -138,7 +137,7 @@ const handleRemoveImage = (index) => {
                         placeholder="Enter description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        // className={styles.textAreaField}
+                        className={styles.textAreaField}
                     />
                 </div>
  

@@ -205,7 +205,7 @@ if (staticcategories) static.push({
     // Set banners with movie news, including imageUrl and images
     const banners = [];
     if (latestMovieNews) banners.push({ 
-      type: "movieNews", 
+      type: "News", 
       data: {
         _id: latestMovieNews._id,
         title: latestMovieNews.title,
@@ -217,7 +217,7 @@ if (staticcategories) static.push({
     });
 
     if (latestMovieReview) banners.push({ 
-      type: "MovieReviews", 
+      type: "Movie Reviews", 
       data: {
         _id: latestMovieReview._id,
         title: latestMovieReview.title,
@@ -241,7 +241,7 @@ if (staticcategories) static.push({
     // Prepare the response with both images[] and imageUrl
     const response = [
       { 
-        type: "movieNews", 
+        type: "News", 
         _id: "", 
         data: movieNews.map(news => ({
           ...news.toObject(),
@@ -250,7 +250,7 @@ if (staticcategories) static.push({
         }))
       },
       { 
-        type: "movieReviews", 
+        type: "Movie Reviews", 
         _id: "", 
         data: movieReviews.map(review => ({
           ...review.toObject(),
@@ -294,9 +294,9 @@ exports.getAllData = async (req, res) => {
     let responseData = {};
 
     // Fetch movie news
-    if (lowerCaseType === "movienews") {
+    if (lowerCaseType === "news") {
       responseData = {
-        type: "movieNews",
+        type: "News",
      
         data: await movieNewsmodel
           .find()

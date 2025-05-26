@@ -5,6 +5,10 @@ const userController = require('../controllers/userController');
 const authMiddleware = require("../middlewares/authMiddleware");
 const adminAuthMiddleware = require('../middlewares/adminAuthMiddleware');
 
+router.post('/validate-login-type', userController.validateLoginType);
+router.post('/register', userController.register);
+router.post('/login', userController.login);
+
 // Social login (Google)
 router.post('/social-register', userController.socialRegister);
 router.post('/social-login', userController.socialLogin);

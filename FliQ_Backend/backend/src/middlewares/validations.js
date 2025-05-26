@@ -2,6 +2,9 @@ const userModel = require('../models/userModel');
 const bcrypt = require('bcrypt')
 
 exports.hashPassword = async (password) => {
+    if (!password) {
+        throw new Error('Password is required');
+    }
     return await bcrypt.hash(password, 10);
 };
 

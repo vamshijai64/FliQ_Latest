@@ -6,6 +6,94 @@ const mongoose = require('mongoose')
 const Token = require('../models/tokenModel'); 
 const jwt = require('jsonwebtoken')
 
+exports.validateLoginType = async ({ email, loginType }) => {
+  if (!email || !loginType) {
+    const err = new Error('Email and login type are required');
+    err.status = 400;
+    throw err;
+  }
+
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    return { status: 200, message: 'Email is available for registration/login' };
+  }
+
+  if (user.loginType !== loginType) {
+    const err = new Error(`Email is already registered with ${user.loginType} sign-in.`);
+    err.status = 400;
+    err.loginType = user.loginType; // Attach loginType to the error
+    throw err;
+  }
+
+  // return { status: 409, message: `Email already registered with the same login method.` };
+  return { status: 409, loginType: user.loginType, message: `Email already registered with the ${user.loginType} sign-in.`,  };
+};
+
+exports.register = async ({ email, password, name, loginType }) => {
+  if (!email || !loginType) {
+    const err = new Error('Email and login type are required');
+    err.status = 400;
+    throw err;
+  }
+
+  const existingUser = await userModel.findOne({ email });
+
+  if (existingUser) {
+    if (existingUser.loginType !== loginType) {
+      const err = new Error(`Email is already registered with ${existingUser.loginType} login.`);
+      err.status = 400;
+      throw err;
+    }
+    const err = new Error('Email already exists.');
+    err.status = 409;
+    throw err;
+  }
+
+  const hashedPassword = loginType === 'email-password' ? await validations.hashPassword(password) : undefined;
+
+  const newUser = new userModel({ email, name, loginType, password: hashedPassword });
+
+  return await newUser.save();
+};
+
+exports.login = async ({ email, password, loginType }) => {
+  if (!email || !loginType) {
+    const err = new Error('Email and login type are required.');
+    err.status = 400;
+    throw err;
+  }
+
+  const user = await userModel.findOne({ email })
+  if (!user) {
+    const err = new Error('Invalid email or login type');
+    err.status = 401;
+    throw err;
+  }
+
+  if (user.loginType !== loginType) {
+    const err = new Error(`This email is registered using ${user.loginType} login. Please use the correct login method.`);
+    err.status = 403;
+    throw err;
+  }
+
+  if (loginType === 'email-password') {
+    const validPassword = await validations.comparePassword(password, user.password);
+    if (!validPassword) {
+      const err = new Error('Incorrect password.');
+      err.status = 401;
+      throw err;
+    }
+  }
+
+  const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET || 'your_jwt_secret');
+
+  // Optional: Save token to DB
+  await Token.create({ userId: user._id, token });
+
+  return { user, token };
+};
+
 exports.registerUser = async ({ email, password }) => {
     if (!email || !password) {
         throw new Error('Email and password are required login.');
@@ -19,6 +107,48 @@ exports.registerUser = async ({ email, password }) => {
     const hashedPassword = await validations.hashPassword(password);
     const newUser = new userModel({ email, password: hashedPassword });
     return await newUser.save();
+};
+
+exports.registerUser2 = async ({ email, password, loginType = 'normal' }) => {
+    if (!email) throw new Error('Email is required.');
+
+    if (loginType === 'normal' && !password) {
+        throw new Error('Password is required for normal registration.');
+    }
+
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+        throw new Error('User already registered with this email.');
+    }
+
+    const hashedPassword = password ? await validations.hashPassword(password) : undefined;
+
+    const newUser = new userModel({
+        email,
+        password: hashedPassword,
+        loginType
+    });
+
+    return await newUser.save();
+};
+
+exports.socialLogin2 = async ({ email, password }) => {
+    const user = await userModel.findOne({ email }).select("+password");
+    if (!user) throw new Error('Invalid email or user does not exist.');
+
+    // if (user.loginType === 'social') {
+    //     // Optional: skip password check or add token-based auth
+    //     return generateLoginResponse(user);
+    // }
+    
+    if (!user.password) {
+        throw new Error('Password login not available for this account.');
+    }
+
+    const validPassword = await validations.comparePassword(password, user.password);
+    if (!validPassword) throw new Error('Invalid password.');
+
+    return generateLoginResponse(user);
 };
 
 exports.socialLogin = async ({ email, password }) => {

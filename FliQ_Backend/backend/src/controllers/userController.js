@@ -1,6 +1,18 @@
 const userService = require('../services/userService')
 const mongoose = require('mongoose')
-const UserModel = require('../models/userModel')    
+const UserModel = require('../models/userModel')
+const Token = require('../models/tokenModel'); 
+const jwt = require('jsonwebtoken')   
+const bcrypt = require('bcrypt');
+
+exports.validateLoginType = async (req, res) => {
+  try {
+    const result = await userService.validateLoginType(req.body);
+    res.status(result.status).json({ loginType: result.loginType, message: result.message });
+  } catch (err) {
+    res.status(err.status || 500).json({ loginType: err.loginType || null, message: err.message });
+  }
+};
 
 exports.socialRegister = async (req, res) => {
     try {
@@ -11,6 +23,145 @@ exports.socialRegister = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.register = async (req, res) => {
+  try {
+    const result = await userService.register(req.body);
+    res.status(201).json({ message: 'Registered successfully', user: result });
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).json({ message: err.message });
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const result = await userService.login(req.body);
+    res.status(200).json({ message: 'Login successful', token: result.token, user: result.user });
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).json({ message: err.message });
+  }
+};
+
+
+// exports.register = async (req, res) => {
+//     try {
+//         const { email, password, username } = req.body;
+
+//         const existingUser = await UserModel.findOne({ email });
+//         if (existingUser) return res.status(400).json({ error: 'User already exists' });
+
+//         // Determine login type based on whether password is provided
+//         let loginType = password ? 'normal' : 'social';
+
+//         if (loginType === 'normal' && !password) {
+//             return res.status(400).json({ error: 'Password is required for normal registration' });
+//         }
+
+//         const user = new UserModel({
+//             email,
+//             password,
+//             username,
+//             loginType,
+//         });
+
+//         await user.save();
+
+//         res.json({ message: 'User registered successfully', user });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
+
+// exports.login = async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
+
+//         const user = await UserModel.findOne({ email }).select('+password');
+//         if (!user) return res.status(404).json({ error: 'User not found' });
+
+//         // Determine loginType
+//         const loginType = password ? 'normal' : 'social';
+
+//         if (user.loginType !== loginType) {
+//             return res.status(400).json({ error: `Please login using ${user.loginType} method` });
+//         }
+
+//         if (loginType === 'normal') {
+//             const isMatch = await bcrypt.compare(password, user.password);
+//             if (!isMatch) return res.status(400).json({ error: 'Incorrect password' });
+//         }
+
+//         // Generate JWT
+//         const token = jwt.sign(
+//             { userId: user._id, email: user.email },
+//             process.env.JWT_SECRET,
+//             { expiresIn: '1d' }
+//         );
+
+//         // Save token in DB
+//         await Token.create({ userId: user._id, token });
+
+//         res.json({ message: `${loginType} login successful`, user, token });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
+
+// // REGISTER (Social + Normal)
+// exports.register = async (req, res) => {
+//     try {
+//         const { email, password, loginType = 'normal', username } = req.body;
+
+//         const existingUser = await UserModel.findOne({ email });
+//         if (existingUser) return res.status(400).json({ error: 'User already exists' });
+
+//         if (loginType === 'normal' && !password) {
+//             return res.status(400).json({ error: 'Password is required for normal registration' });
+//         }
+
+//         const user = new UserModel({
+//             email,
+//             password,
+//             username,
+//             loginType,
+//         });
+
+//         await user.save();
+
+//         res.json({ message: 'User registered successfully', user });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
+
+// // LOGIN (Social + Normal)
+// exports.login = async (req, res) => {
+//     try {
+//         const { email, password, loginType = 'normal' } = req.body;
+
+//         const user = await UserModel.findOne({ email }).select('+password');
+//         if (!user) return res.status(404).json({ error: 'User not found' });
+
+//         if (user.loginType !== loginType) {
+//             return res.status(400).json({ error: `Please login using ${user.loginType} method` });
+//         }
+
+//         if (loginType === 'normal') {
+//             const isMatch = await bcrypt.compare(password, user.password);
+//             if (!isMatch) return res.status(400).json({ error: 'Incorrect password' });
+//         }
+
+//         const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, {
+//             expiresIn: '1d'
+//         });
+
+//         res.json({ message: `${loginType} login successful`, user, token });
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
 
 exports.socialLogin = async (req, res) => {
     try {

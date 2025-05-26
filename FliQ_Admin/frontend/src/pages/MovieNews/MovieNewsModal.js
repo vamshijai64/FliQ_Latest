@@ -127,8 +127,14 @@ const handleRemoveImage = (index) => {
                         placeholder="Enter movie title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        maxLength={25}
                         className={styles.inputField}
                     />
+                </div>
+                <div className={styles.messageBlock}>
+                  <small className={styles.charCount}>
+                    {title.length}/25 characters left
+                  </small>
                 </div>
                 
                 <label>Description</label>
@@ -137,11 +143,17 @@ const handleRemoveImage = (index) => {
                         placeholder="Enter description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        maxLength={800}
                         className={styles.textAreaField}
                     />
                 </div>
+                <div className={styles.messageBlock}>
+                  <small className={styles.charCount}>
+                    {description.length}/800 characters left
+                  </small>
+                </div>
  
-                <label>Movie News ImageUrl</label>
+                <label>Movie News ImageUrl --- (Upload Landscape image)</label>
                 <div className={styles.inputContainer}>
                   <input
                     type="text"

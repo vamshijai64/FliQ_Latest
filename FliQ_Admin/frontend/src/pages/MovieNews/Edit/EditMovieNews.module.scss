@@ -88,7 +88,7 @@
     align-items: center;
     position: relative;
     width: 100%;
-    margin-bottom: 20px; 
+    margin-bottom: 2px; 
 }
 
 .inputContainer input[type="text"] {
@@ -104,11 +104,24 @@
     display: none;
 }
 
+.messageBlock {
+  min-height: 15px; // adjust as needed
+  margin-top: 2px;
+  margin-bottom: 20px;
+
+  small {
+    display: block;
+    font-size: 12px;
+    color: #c1c0c0;
+    text-align: left;
+  }
+}
+
 .textarea {
     display: flex;
     flex-direction: column;
     width: 100%; 
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 .textarea label {

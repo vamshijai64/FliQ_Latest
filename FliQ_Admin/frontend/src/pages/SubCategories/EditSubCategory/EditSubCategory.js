@@ -88,7 +88,7 @@
         try {
             const payload = {
                 title: subCategoryNewName,
-                imageUrl: imageFile ? imageUrls : newImageUrl  // ✅ Send object if file was uploaded
+                imageUrl: imageFile ? imageUrls : newImageUrl  //Send object if file was uploaded
             };
 
             const response = await axiosInstance.put(`/subcategories/update/${subcategoryId}`, payload);
@@ -122,21 +122,21 @@
                         />
                     </div>
             
-                    <label>SubCategory Url</label>
+                    <label>SubCategory Url --- (Upload Portrait image)</label>
                     <div className={styles.inputContainer}>
                         <input type='file' ref={fileInputRef} onChange={handleFileChange} hidden />
                         <input type='text' 
-    placeholder='Enter image URL'
-    value={
-        imageFile 
-        ? imageUrls.landscape 
-        : typeof newImageUrl === "string" 
-            ? newImageUrl 
-            : newImageUrl?.portrait || ""
-    }
-    onChange={(e) => setNewImageUrl(e.target.value)} 
-    disabled={imageFile !== null}
-    />
+                            placeholder='Enter image URL'
+                            value={
+                                imageFile 
+                                ? imageUrls.landscape 
+                                : typeof newImageUrl === "string" 
+                                ? newImageUrl 
+                                : newImageUrl?.portrait || ""
+                            }
+                            onChange={(e) => setNewImageUrl(e.target.value)} 
+                            disabled={imageFile !== null}
+                        />
 
                         <MdOutlineImage className={styles.icon}  onClick={handleIconClick}/>
                     </div>  

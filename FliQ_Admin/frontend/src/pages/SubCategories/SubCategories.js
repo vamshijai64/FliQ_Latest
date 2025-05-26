@@ -135,7 +135,7 @@
                         />
                     </div>
 
-                    <label>Sub-Category Thumbnail Image</label>
+                    <label>Sub-Category Image ---  (Upload Portrait image)</label>
                     <div className={styles.inputContainer}>
                         <input type="file" ref={fileInputRef} onChange={handleFileChange} hidden />
                         <input

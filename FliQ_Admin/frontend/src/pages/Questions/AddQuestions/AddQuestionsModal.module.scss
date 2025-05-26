@@ -18,8 +18,8 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 1000px;
-    height: 670px;
+    width: 1100px;
+    height: 680px;
     max-width: 90%;
     position: relative;
     text-align: center;
@@ -122,7 +122,7 @@ h2 {
     align-items: center;
     position: relative;
     width: 100%;
-    margin-bottom: 20px; 
+    margin-bottom: 2px; 
 }
 
 .inputContainer input[type="text"] {
@@ -134,7 +134,24 @@ h2 {
     padding-right: 45px;
 }
 
+.messageBlock {
+  min-height: 15px; // adjust as needed
+  margin-top: 2px;
 
+  small {
+    display: block;
+    font-size: 12px;
+    color: #c1c0c0;
+    text-align: left;
+  }
+
+  .warningText {
+    font-size: 12px;
+    color: red;
+    margin: 2px 0 0;
+    text-align: left;
+  }
+}
 .customDropdown {
     position: relative;
     display: flex;
@@ -169,7 +186,7 @@ h2 {
 .textarea {
     display: flex;
     flex-direction: column;
-    width: 100.4%;
+    width: 100.5%;
     margin-bottom: 10px; 
 }
 
@@ -181,7 +198,7 @@ h2 {
 }
 
 .textareaField {
-    width: 97%;
+    width: 97.5%;
     height: 20px;
     padding: 10px;
     border: 1px solid #ccc;

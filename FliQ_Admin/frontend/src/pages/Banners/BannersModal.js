@@ -120,7 +120,7 @@ function BannersModal ({isOpen, onClose}) {
                             className={styles.inputField}
                         />
                     </div>
-                    <label>Banner ImageUrl</label>
+                    <label>Banner ImageUrl --- (Upload Landscape Image)</label>
                     <div className={styles.inputContainer}>
                         <input
                             type="text"

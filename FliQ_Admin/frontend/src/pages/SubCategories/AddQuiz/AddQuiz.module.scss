@@ -18,8 +18,8 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 1000px;
-    height: 670px;
+    width: 1100px;
+    height: 680px;
     max-width: 90%;
     position: relative;
     text-align: center;
@@ -120,7 +120,7 @@ h2 {
     align-items: center;
     position: relative;
     width: 100%;
-    margin-bottom: 20px; 
+    margin-bottom: 5px; 
 }
 
 .inputContainer input[type="text"] {
@@ -130,6 +130,37 @@ h2 {
     border-radius: 5px;
     font-size: 1rem;
     padding-right: 45px;
+}
+
+// .charCount {
+//     font-size: 0.75rem;
+//     color: #e4e3e3;
+//     text-align: left;
+//     margin-bottom: 10px;
+//     display: block;
+// }
+
+// .warningText {
+//     color: red;
+//     font-size: 0.75rem;
+// }
+.messageBlock {
+  min-height: 15px; // adjust as needed
+  margin-top: 2px;
+
+  small {
+    display: block;
+    font-size: 12px;
+    color: #c1c0c0;
+    text-align: left;
+  }
+
+  .warningText {
+    font-size: 12px;
+    color: red;
+    margin: 2px 0 0;
+    text-align: left;
+  }
 }
 
 
@@ -179,7 +210,7 @@ h2 {
 }
 
 .textareaField {
-    width: 97%;
+    width: 97.5%;
     height: 5px;
     padding: 10px;
     border: 1px solid #ccc;

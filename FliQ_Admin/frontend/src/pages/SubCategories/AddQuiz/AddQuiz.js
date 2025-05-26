@@ -168,20 +168,45 @@ function AddQuiz({ isOpen, onClose, subcategory }) {
                 <h2>Quiz for:   {subcategory?.title}</h2>
 
                 {error && <p className={styles.error}>{error}</p>}
-                    <p className={styles.QuesNumber}>Question ({currentIndex + 1})</p>
-                    <label>Question Title</label>
+                    {/* <p className={styles.QuesNumber}>Question ({currentIndex + 1})</p> */}
+                    <label>{currentIndex + 1}). Question Title</label>
                     <div className={styles.inputContainer}>
                         <input type='text' placeholder='Enter Question' maxLength={90} value={question} onChange={handleQuestionChange}/>
+                        
+                    </div>
+                    {/* <small className={styles.charCount}>{question.length}/90 characters left</small> */}
+                    {/* {question.length >= 90 && (
+                        <p className={styles.warningText}>Maximum character limit (90) reached.</p>
+                    )} */}
+
+                    <div className={styles.messageBlock}>
+                        <small className={styles.charCount}>
+                            {question.length}/90 characters left
+                        </small>
+                        <p className={styles.warningText}>
+                            {question.length >= 90 ? "Maximum character limit (90) reached." : "\u00A0"}
+                        </p>
                     </div>
 
                     <div className={styles.optionsContainer}>
                         <div className={styles.optionBox}>
                             <label>Option A</label>
                             <input type='text' placeholder='Enter Option A' maxLength={25} value={options.A} onChange={(e) => handleOptionChange("A", e.target.value)}></input>
+                            <div className={styles.messageBlock}>
+                                <small className={styles.charCount}>
+                                    {options.A.length}/25 characters left
+                                </small>
+                            </div>
                         </div>
+                        
                         <div className={styles.optionBox}>
                             <label>Option B</label>
                             <input type='text' placeholder='Enter Option B' maxLength={25} value={options.B} onChange={(e) => handleOptionChange("B",e.target.value)}></input>
+                            <div className={styles.messageBlock}>
+                                <small className={styles.charCount}>
+                                    {options.B.length}/25 characters left
+                                </small>
+                            </div>
                         </div>
                     </div>
 
@@ -189,10 +214,20 @@ function AddQuiz({ isOpen, onClose, subcategory }) {
                         <div className={styles.optionBox}>
                             <label>Option C</label>
                             <input type='text' placeholder='Enter Option C' maxLength={25} value={options.C} onChange={(e) => handleOptionChange("C", e.target.value)}></input>
+                            <div className={styles.messageBlock}>
+                                <small className={styles.charCount}>
+                                    {options.C.length}/25 characters left
+                                </small>
+                            </div>
                         </div>
                         <div className={styles.optionBox}>
                             <label>Option D</label>
                             <input type='text' placeholder='Enter Option D' maxLength={25} value={options.D} onChange={(e) => handleOptionChange("D", e.target.value)}></input>
+                            <div className={styles.messageBlock}>
+                                <small className={styles.charCount}>
+                                    {options.D.length}/25 characters left
+                                </small>
+                            </div>
                         </div>
                     </div>
 

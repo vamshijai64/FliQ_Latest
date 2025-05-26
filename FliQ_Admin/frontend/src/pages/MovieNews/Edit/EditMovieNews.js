@@ -116,8 +116,14 @@ function EditMovieNews({ isOpen, titleId, onClose, titleName, movieDescription, 
                             placeholder="Enter movie title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            maxLength={25}
                             className={styles.inputField}
                         />
+                    </div>
+                    <div className={styles.messageBlock}>
+                        <small className={styles.charCount}>
+                            {title.length}/25 characters left
+                        </small>
                     </div>
 
                     <label>Description</label>
@@ -125,11 +131,17 @@ function EditMovieNews({ isOpen, titleId, onClose, titleName, movieDescription, 
                         <textarea
                             placeholder="Enter description"
                             value={description}
+                            maxLength={800}
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
+                    <div className={styles.messageBlock}>
+                        <small className={styles.charCount}>
+                            {description.length}/800 characters left
+                        </small>
+                    </div>
 
-                    <label>Movie News Image Upload</label>
+                    <label>Movie News Image Upload --- (Upload Landscape image)</label>
                     <div className={styles.inputContainer}>
                         <input
                             type="text"

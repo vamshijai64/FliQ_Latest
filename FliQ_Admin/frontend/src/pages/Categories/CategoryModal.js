@@ -126,7 +126,7 @@
             />
           </div>
 
-          <label>Category Image Upload</label>
+          <label>Category Image Upload --- (Upload Landscape image)</label>
           <div className={styles.inputContainer}>
             <input type="file" ref={fileInputRef} onChange={handleFileChange} hidden />
             <input

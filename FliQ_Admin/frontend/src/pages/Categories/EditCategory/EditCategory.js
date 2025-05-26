@@ -129,7 +129,7 @@
                             />
                         </div>
 
-                        <label>Category Url</label>
+                        <label>Category Url --- (Upload landscape image)</label>
                         <div className={styles.inputContainer}>
                             <input type='file' ref={fileInputRef} onChange={handleFileChange} hidden />
                             <input type='text' 

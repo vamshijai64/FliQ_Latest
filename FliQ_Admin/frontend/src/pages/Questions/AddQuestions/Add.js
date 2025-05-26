@@ -137,7 +137,7 @@
                 </div>
 
                 <div className={styles.inputGroup}>
-                    <label>Subcategory Thumbnail Image</label>
+                    <label>Subcategory Image --- (Upload Portrait Image)</label>
                     <div className={styles.inputWrapper}>
                         <input
                             type="text"
